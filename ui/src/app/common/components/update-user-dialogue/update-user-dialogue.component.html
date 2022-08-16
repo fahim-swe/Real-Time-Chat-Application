@@ -1,0 +1,50 @@
+<mat-dialog-content>
+  <h2>Update {{ data.userName }}</h2>
+  <form
+    #deleteDialogForm="ngForm"
+    class="flex justify-center items-center flex-col"
+  >
+    <mat-form-field appearance="standard" class="w-full">
+      <mat-label>email</mat-label>
+      <input
+        matInput
+        email
+        required
+        [ngModel]="data.email"
+        #email="ngModel"
+        name="email"
+      />
+      <mat-error>{{
+        email.hasError("required") ? "required" : "invalid email"
+      }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="standard" class="w-full">
+      <mat-label>Birth date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        name="birthDate"
+        [ngModel]="data.birthDate"
+        required
+        appAgeValidator
+        #datePicker="ngModel"
+      />
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker class="bg-transparent"></mat-datepicker>
+      <mat-error>must be 18</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button (click)="onNoClick()">cancel</button>
+  <button
+    mat-flat-button
+    [mat-dialog-close]="deleteDialogForm.value"
+    [disabled]="deleteDialogForm.invalid"
+    cdkFocusInitial
+  >
+    update
+  </button>
+</mat-dialog-actions>

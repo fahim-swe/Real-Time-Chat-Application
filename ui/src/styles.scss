@@ -1,0 +1,33 @@
+/* You can add global styles to this file, and also import other style files */
+@use "@angular/material" as mat;
+@include mat.core();
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+$primary: #000000;
+:root {
+  --primary: #3f51b5;
+  --primary-dark: #303f9f;
+  --secondary: #80cbc4;
+  --error: #b00020;
+}
+html,
+body {
+  overflow-y: auto;
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.skewed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: #2c3e50;
+  z-index: 0;
+  transform: skewY(20deg);
+  transform-origin: top right;
+}

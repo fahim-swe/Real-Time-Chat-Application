@@ -1,0 +1,141 @@
+<div class="card glass lg:w-96">
+  <div class="card-body">
+    <form [formGroup]="regFormGroup" (ngSubmit)="register(regFormGroup.value)">
+      <!-- username field -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Username</span>
+        </label>
+        <input
+          type="text"
+          formControlName="username"
+          placeholder="username"
+          id="username"
+          class="input input-bordered w-full"
+          autocomplete="off"
+        />
+        <label
+          class="label"
+          *ngIf="
+            regFormGroup.get('username')?.touched &&
+            regFormGroup.get('username')?.invalid
+          "
+        >
+          <span class="label-text text-error flex flex-col">
+            {{ getErrorMsg(regFormGroup.get("username")) }}
+          </span>
+        </label>
+      </div>
+
+      <!-- email field -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Email</span>
+        </label>
+        <input
+          type="text"
+          placeholder="email"
+          class="input input-bordered w-full"
+          autocomplete="off"
+          formControlName="email"
+        />
+        <label
+          class="label"
+          *ngIf="
+            regFormGroup.get('email')?.touched &&
+            regFormGroup.get('email')?.invalid
+          "
+        >
+          <span class="label-text text-error flex flex-col">
+            {{ getErrorMsg(regFormGroup.get("email")) }}
+          </span>
+        </label>
+      </div>
+
+      <!-- date of birth field -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Date of Birth</span>
+        </label>
+        <input
+          type="date"
+          placeholder="date of birth"
+          class="input input-bordered w-full"
+          autocomplete="off"
+          formControlName="birthDate"
+        />
+        <label
+          class="label"
+          *ngIf="
+            regFormGroup.get('birthDate')?.touched &&
+            regFormGroup.get('birthDate')?.invalid
+          "
+        >
+          <span class="label-text text-error flex flex-col">
+            {{ getErrorMsg(regFormGroup.get("birthDate")) }}
+          </span>
+        </label>
+      </div>
+
+      <!-- password field -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Password</span>
+        </label>
+        <input
+          type="text"
+          placeholder="password"
+          class="input input-bordered w-full"
+          autocomplete="off"
+          formControlName="password"
+        />
+        <label
+          class="label"
+          *ngIf="
+            regFormGroup.get('password')?.touched &&
+            regFormGroup.get('password')?.invalid
+          "
+        >
+          <span class="label-text text-error flex flex-col">
+            {{ getErrorMsg(regFormGroup.get("password")) }}
+          </span>
+        </label>
+      </div>
+
+      <!--repeated password field -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Confirm Password</span>
+        </label>
+        <input
+          type="text"
+          placeholder="password"
+          class="input input-bordered w-full"
+          formControlName="repeatedPassword"
+          [autocomplete]="false"
+        />
+        <label
+          class="label"
+          *ngIf="
+            regFormGroup.get('repeatedPassword')?.touched &&
+            regFormGroup.get('repeatedPassword')?.invalid
+          "
+        >
+          <span class="label-text text-error flex flex-col">
+            {{ getErrorMsg(regFormGroup.get("repeatedPassword")) }}
+          </span>
+        </label>
+      </div>
+      <div class="form-control mt-6">
+        <button class="btn btn-primary" [disabled]="regFormGroup.invalid">
+          Sign Up
+        </button>
+      </div>
+    </form>
+    <div class="divider">OR</div>
+    <p class="w-full text-center">
+      allready have an account?
+      <a routerLink="../login" class="link">sign in</a>
+    </p>
+  </div>
+</div>

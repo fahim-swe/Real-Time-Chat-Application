@@ -1,0 +1,49 @@
+<!-- <div>
+  <div *ngIf="loaderService.isLoading$ | async" class="">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <h1 class="cursor-pointer mx-3" routerLink="welcome">Learnathon 2022</h1>
+      <span style="flex: 1 1 auto"></span>
+      <button mat-stroked-button>Install</button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</div> -->
+
+<div class="navbar glass">
+  <div class="navbar-start">
+    <div class="dropdown">
+      <label tabindex="0" class="btn btn-ghost btn-circle">
+        <fa-icon
+          [icon]="ic_menu"
+          [size]="'lg'"
+          [classList]="'text-base-100'"
+        ></fa-icon>
+      </label>
+      <ul
+        tabindex="0"
+        class="menu menu-compact bg-primary hover:bg-primary dropdown-content p-2 mt-3 glass rounded-box w-52"
+      >
+        <li><a routerLink="home/users" class="text-base-100">Homepage</a></li>
+        <li><a  class="text-base-100">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="navbar-center">
+    <a
+      class="btn btn-ghost normal-case text-xl text-base-100"
+      routerLink="welcome"
+      >LChat</a
+    >
+  </div>
+  <div class="navbar-end">
+    <button class="btn btn-ghost btn-circle">
+      <fa-icon
+        [icon]="ic_install"
+        [size]="'lg'"
+        [classList]="'text-base-100'"
+      ></fa-icon>
+    </button>
+  </div>
+</div>

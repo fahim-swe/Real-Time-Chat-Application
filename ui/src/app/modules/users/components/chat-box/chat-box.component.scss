@@ -1,0 +1,70 @@
+
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.recieverusername{
+  margin-top: -30px;
+  font-size: 2.5rem;
+}
+.scrolling
+{
+    margin-top: 25px;
+	height: 65vh;
+	min-width: 90vw;
+	background: #F5F5F5;
+	overflow-y: scroll;
+	margin-bottom: 25px;
+    behavior: 'smooth';
+
+}
+
+
+.sms-content{
+    padding: 20px;
+    font-size: 20px;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.sms-content span{
+    background-color: bisque;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.my_message{
+    display: flex;
+    justify-content: start;
+}
+
+.frd_message{
+    display: flex;
+    justify-content: end;
+}
+
+.chat-box{
+    min-width: 90vw;
+}
+.chat-box form{
+    display: flex;
+    justify-content: space-between;
+}
+
+.chat-box form input{
+    flex: 1;
+    padding: 10px;
+    outline: 2px solid honeydew;
+    background-color: beige;
+    font-size: 20px;
+}
+
+
+
+
+
+
+
+

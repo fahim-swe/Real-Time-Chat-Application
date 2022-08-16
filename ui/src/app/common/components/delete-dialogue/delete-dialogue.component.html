@@ -1,0 +1,5 @@
+<mat-dialog-content> Do you want to delete {{ data }} ?</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button (click)="onNoClick()">cancel</button>
+  <button mat-flat-button mat-dialog-close="OK" cdkFocusInitial>delete</button>
+</mat-dialog-actions>

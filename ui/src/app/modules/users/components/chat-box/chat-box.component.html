@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="recieverusername">
+        {{recieverUsername}}
+    </div>
+   
+    <div class="scrolling" #scrollMe [scrollTop]="scrollMe.scrollHeight" >
+
+        <div *ngFor="let message of (messageService.messageThread$ | async)">
+            <div  class="sms-content">
+                <div  class="my_message">
+                    <span *ngIf="message.recipientId !== recieverId">
+                        {{message.content}} 
+                         
+                        <span style="font-weight: 100; font-size: 15px;"> {{message.messageSent | date}}</span>
+                       
+                    </span>
+                </div>
+                <div class="frd_message">
+                    <span  *ngIf="message.recipientId == recieverId">
+                        {{message.content}}
+                        <span style="font-weight: 100; font-size: 15px;"> {{message.messageSent | date}}</span>
+                    </span>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="chat-box">
+        <form  [formGroup] ="sendNewSMS" (ngSubmit)="sendSMS()" >
+            <input 
+                formControlName="content"
+                placeholder="Type your sms">
+            <button type="submit" class="btn btn-primary"> Send</button>
+        </form>
+    </div>
+</div>
+
