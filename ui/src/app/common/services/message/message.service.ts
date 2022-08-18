@@ -58,13 +58,10 @@ export class MessageService {
 
     this.hubConnection.on('NewMessage', message => {
       
-      if(message.senderId !== this.userId){
-          this.messageThreadSource.pipe(take(1)).subscribe(messages => {
-
-          this.messageThreadSource.next([...messages, message]);
-          this.checkNew = true;
-        })
-      }
+      this.messageThreadSource.pipe(take(1)).subscribe(messages => {
+      this.messageThreadSource.next([...messages, message]);
+        this.checkNew = true;
+      })  
     })
   }
 
@@ -80,7 +77,6 @@ export class MessageService {
   {
     
     return this.hubConnection.invoke("SendMessage", message)
-         
          .catch(erorr => {
           console.log("Error in sending sms " + erorr);
          });

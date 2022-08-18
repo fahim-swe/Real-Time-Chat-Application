@@ -11,6 +11,6 @@ namespace api.DTOs
         
         public string Content {get; set;}
 
-        public DateTime MessageSent {get; set;}
+        public DateTime MessageSent {get; set;} = DateTime.Now;
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace api.RabbitMQ
 {
-    public interface IRabbitMQService
+    public interface ISignalRConsumer
     {
         void Connect();
     }

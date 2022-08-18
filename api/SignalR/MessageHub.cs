@@ -19,14 +19,13 @@ namespace api.SignalR
         private readonly IMessageRepository _messageRepository;
         private readonly IMapper _mapper;
 
-        private readonly IRabitMQSignalRConsumer _rabitMQSignalRConsumer;
+ 
         private readonly IRabbitMQPublish _rabbitMQPublish;
 
         public MessageHub(IMessageRepository messageRepository, IMapper mapper,
-            IRabitMQSignalRConsumer consumer, IRabbitMQPublish rabbitMQPublish){
+       IRabbitMQPublish rabbitMQPublish){
             _messageRepository = messageRepository;
             _mapper = mapper;
-            _rabitMQSignalRConsumer = consumer;
             _rabbitMQPublish = rabbitMQPublish;
 
         }
@@ -43,8 +42,6 @@ namespace api.SignalR
 
             var message = await _messageRepository
                 .GetMessageThred(userId, otherUser);
-            
-            _rabitMQSignalRConsumer.setQueueName(userId + otherUser, groupName);
             await Clients.Group(groupName).SendAsync("RecieveMessageThread", message);
         }
 
@@ -62,22 +59,20 @@ namespace api.SignalR
                 throw new HubException("You cann't send message to yourself");
             }
 
-            var _message = new Message
+            var publishMessage = new PublishMessageDto
             {   
                 SenderId = userId,
                 RecipientId = message.RecipientId,
-                Content = message.Content
+                Content = message.Content,
+                GroupName = GetGroupName(userId, message.RecipientId),
+                MessageSent = message.MessageSent,
             };
-
-            _rabbitMQPublish.isOnline(true);
-            var exchangeName = GetGroupName(message.RecipientId, userId);
-            await _rabbitMQPublish.sendMessageToQueue(message.RecipientId + userId, exchangeName,_message);
+            
+            await _rabbitMQPublish.sendMessageToQueue(publishMessage);
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            _rabitMQSignalRConsumer.reset();
-            _rabbitMQPublish.isOnline(false);
             await base.OnDisconnectedAsync(exception);
         }
 

@@ -6,26 +6,25 @@ using System.Threading.Tasks;
 using api.DTOs;
 using api.Model;
 using api.Services;
-using api.SignalR;
-using Microsoft.AspNetCore.SignalR;
+using AutoMapper;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-
-
-
 namespace api.RabbitMQ
 {
-    public class RabbitMQService : IRabbitMQService
+    public class RabbitMQDBConsumer : IDBConsumer
     {
         protected readonly ConnectionFactory _factory;
         protected readonly IConnection _connection;
         protected readonly IModel _channel;
         protected readonly IServiceProvider _serviceProvider;
         private readonly IMessageRepository _message;
-        private string queueName = "DATABASE";
-        public RabbitMQService(IServiceProvider serviceProvider, IMessageRepository message
+        private readonly IMapper _mapper;
+        private string queueName = "DATABASEQueue";
+    
+        public RabbitMQDBConsumer(IServiceProvider serviceProvider, IMessageRepository message,
+            IMapper mapper
         )
         {
             _factory = new ConnectionFactory() {
@@ -37,6 +36,8 @@ namespace api.RabbitMQ
             _connection = _factory.CreateConnection();
             _channel = _connection.CreateModel();
             _message = message;
+
+            _mapper = mapper;
  
             _serviceProvider = serviceProvider;
         }
@@ -51,11 +52,21 @@ namespace api.RabbitMQ
         
                 byte[] body = ea.Body.ToArray();
 
-                var message = Encoding.UTF8.GetString(body);
+                var data = Encoding.UTF8.GetString(body);
               
                 try{
-                    var result = JsonConvert.DeserializeObject<Message>(message);
-                    await _message.AddMessage(result);
+                    var result = JsonConvert.DeserializeObject<PublishMessageDto>(data);
+                    Console.WriteLine(result);
+
+                    var message = new Message
+                    {   
+                        SenderId = result.SenderId,
+                        RecipientId = result.RecipientId,
+                        Content = result.Content
+                    };
+
+                    Console.WriteLine( "DATABASE" + message);
+                    await _message.AddMessage(message);
                         
                 }catch(Exception e){
                     Console.WriteLine(e);

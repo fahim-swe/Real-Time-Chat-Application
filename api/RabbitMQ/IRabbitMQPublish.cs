@@ -9,7 +9,6 @@ namespace api.RabbitMQ
 {
     public interface IRabbitMQPublish
     {
-        Task sendMessageToQueue(string queuename, string exchangeName,Message message);
-        void isOnline(bool f);
+        Task sendMessageToQueue(PublishMessageDto publishMessage);
     }
 }

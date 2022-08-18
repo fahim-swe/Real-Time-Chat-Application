@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 
 namespace api.RabbitMQ
 {
-    public interface IRabitMQSignalRConsumer
+    public interface IDBConsumer
     {
         void Connect();
-        void setQueueName(string queue, string group);
-        void reset();
     }
 }

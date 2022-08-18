@@ -49,8 +49,8 @@ namespace API
             services.AddTransient<IMessageRepository, MessageRepository>();
 
 
-            services.AddSingleton<IRabbitMQService, RabbitMQService>(); // Need a single instance so we can keep the referenced connect with RabbitMQ open
-            services.AddSingleton<IRabitMQSignalRConsumer, RabitMQSignalRConsumer>();
+            services.AddSingleton<IDBConsumer, RabbitMQDBConsumer>(); // Need a single instance so we can keep the referenced connect with RabbitMQ open
+            services.AddSingleton<ISignalRConsumer, RabitMQSignalRConsumer>();
             services.AddSignalR();
             
 
@@ -182,15 +182,15 @@ namespace API
         public void RegisterSignalRWithRabbitMQ(IServiceProvider serviceProvider)
         {
             // Connect to RabbitMQ
-            var rabbitMQService = (IRabbitMQService?)serviceProvider.GetService(typeof(IRabbitMQService));
-            if(rabbitMQService != null){
-                rabbitMQService.Connect();
+            var rabbitMQService1 = (ISignalRConsumer?)serviceProvider.GetService(typeof(ISignalRConsumer));
+            if(rabbitMQService1 != null){
+                rabbitMQService1.Connect();
             }
 
 
-            var rabbitMQwithSignalR = (IRabitMQSignalRConsumer?)serviceProvider.GetService(typeof(IRabitMQSignalRConsumer));
-            if(rabbitMQwithSignalR != null){
-                rabbitMQwithSignalR.Connect();
+            var rabbitMQService2 = (IDBConsumer?)serviceProvider.GetService(typeof(IDBConsumer));
+            if(rabbitMQService2 != null){
+                rabbitMQService2.Connect();
             }
         }
     }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/fahim/Documents/Geeky Solution Larnathon/Task_8/_look_at_baby/api/api.csproj": {}
+    "/home/fahim/Documents/Git/api/api.csproj": {}
   },
   "projects": {
-    "/home/fahim/Documents/Geeky Solution Larnathon/Task_8/_look_at_baby/api/api.csproj": {
+    "/home/fahim/Documents/Git/api/api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/fahim/Documents/Geeky Solution Larnathon/Task_8/_look_at_baby/api/api.csproj",
+        "projectUniqueName": "/home/fahim/Documents/Git/api/api.csproj",
         "projectName": "api",
-        "projectPath": "/home/fahim/Documents/Geeky Solution Larnathon/Task_8/_look_at_baby/api/api.csproj",
+        "projectPath": "/home/fahim/Documents/Git/api/api.csproj",
         "packagesPath": "/home/fahim/.nuget/packages/",
-        "outputPath": "/home/fahim/Documents/Geeky Solution Larnathon/Task_8/_look_at_baby/api/obj/",
+        "outputPath": "/home/fahim/Documents/Git/api/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/fahim/.nuget/NuGet/NuGet.Config"

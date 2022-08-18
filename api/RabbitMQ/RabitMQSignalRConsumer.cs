@@ -1,10 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+
 using System.Text;
-using System.Threading.Tasks;
+using api.DTOs;
 using api.Model;
 using api.SignalR;
+using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -12,18 +11,16 @@ using RabbitMQ.Client.Events;
 
 namespace api.RabbitMQ
 {
-    public class RabitMQSignalRConsumer : IRabitMQSignalRConsumer
+    public class RabitMQSignalRConsumer : ISignalRConsumer
     {
         protected readonly ConnectionFactory _factory;
         protected readonly IConnection _connection;
         protected readonly IModel _channel;
- 
         protected readonly IServiceProvider _serviceProvider;
-
-        private string queue = "NULL";
-        private string group = "NULL";
+        private readonly IMapper _mapper;
+        private string queueName = "SignalRQueue";
  
-        public RabitMQSignalRConsumer(IServiceProvider serviceProvider)
+        public RabitMQSignalRConsumer(IServiceProvider serviceProvider, IMapper mapper)
         {
 
             _factory = new ConnectionFactory() {
@@ -36,46 +33,33 @@ namespace api.RabbitMQ
 
             _connection = _factory.CreateConnection();
             _channel = _connection.CreateModel();
+            _mapper = mapper;
  
             _serviceProvider = serviceProvider;
         }
  
         public  virtual  void Connect()
         {            
-            _channel.QueueDeclare(queue: queue, durable: true, exclusive: false, autoDelete: false);
+            _channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false);
  
             var consumer = new EventingBasicConsumer(_channel);
  
-            consumer.Received += delegate (object? model, BasicDeliverEventArgs ea) {
+            consumer.Received += async delegate (object? model, BasicDeliverEventArgs ea) {
                
                 var chatHub = (IHubContext<MessageHub>)_serviceProvider.GetService(typeof(IHubContext<MessageHub>));
                 
                 byte[] body = ea.Body.ToArray();
 
                 var message = Encoding.UTF8.GetString(body);
-                var result = JsonConvert.DeserializeObject<Message>(message);
+                var result = JsonConvert.DeserializeObject<PublishMessageDto>(message);
 
-                Console.WriteLine(queue + "Checking: " + message);
+                Console.WriteLine(queueName + "Checking: " + message);
 
-                chatHub.Clients.Group(group).SendAsync("NewMessage", result);
+                chatHub.Clients.Group(result.GroupName).SendAsync("NewMessage", _mapper.Map<Message>(result));
             };
  
-            _channel.BasicConsume(queue: queue ,autoAck: true, consumer: consumer);
+            _channel.BasicConsume(queue: queueName ,autoAck: true, consumer: consumer);
         }
 
-        public void reset()
-        {
-            this.queue = "NULL";
-            this.group = "NULL";
-            this.Connect();
-        }
-
-        public void setQueueName(string queue, string group)
-        {
-           this.queue = queue;
-           this.group = group;
-           
-           this.Connect();
-        }
     }
 }

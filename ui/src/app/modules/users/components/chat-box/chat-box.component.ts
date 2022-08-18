@@ -33,28 +33,20 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
       recipientId : [this.recieverId],
     })
   }
+  
 
   constructor(private fb: FormBuilder,
     private router: Router,
     private activeRoute: ActivatedRoute, public messageService: MessageService
-   ) { 
-      
-   
-      user_ :  this.router.getCurrentNavigation()?.extras.state ?? "username";
-      
-    
-    }
-
+   ) {}
 
   ngOnDestroy(): void {
     console.log("Stop HubConnection");
     this.messageService.stopHubConnection();
   }
 
+
   ngOnInit(): void {
-
-    
-
     const id = (this.activeRoute.snapshot.paramMap.get('id'));
     if(id != null){
       this.recieverId = id;
@@ -74,8 +66,6 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   }
 
   
-  
-
   getUserMessage(){
     this.messageService.messageThread$.subscribe(res => {
      
@@ -86,29 +76,14 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
 
   sendSMS()
   {
-     console.log(this.sendNewSMS.value);
-  
      
      this.messageService.sendMessage(this.sendNewSMS.value).then(
       ()=>{
-        this.addMessage(this.sendNewSMS.value);
         this.sendNewSMS.reset();
         this.Ini();
         this.scrolltop = this.comment.nativeElement.scrollHeight;
       }
      )
-  }
-
-
-  addMessage(message: message)
-  {
-   
-    const now = new Date();
-    message.messageSent = now.toDateString();
-    console.log(now);
-    this.messageService.messageThreadSource.pipe(take(1)).subscribe(messages => {
-      this.messageService.messageThreadSource.next([...messages, message]);
-    });
   }
   
 }

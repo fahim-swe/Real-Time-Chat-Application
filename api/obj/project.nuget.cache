@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zGfDQESC24sBGeKFYaMKOqCI7JsL8gEk/pTMmcikuo3X4GaQXMpG5BYFwtcWDUMJ9xloI9VcoiKMG3Cz9MI/lw==",
+  "dgSpecHash": "5ZAvdu/MGklGsuUL0kPRMnk8Z5Erp6g1bkpOvU9mXD6OEtjjHrP5Y0bKEmIHzdE4kDpJ5ufdzMyBqmaUWQCSvg==",
   "success": true,
-  "projectFilePath": "/home/fahim/Documents/Geeky Solution Larnathon/Task_8/_look_at_baby/api/api.csproj",
+  "projectFilePath": "/home/fahim/Documents/Git/api/api.csproj",
   "expectedPackageFiles": [
     "/home/fahim/.nuget/packages/automapper/11.0.0/automapper.11.0.0.nupkg.sha512",
     "/home/fahim/.nuget/packages/automapper.extensions.microsoft.dependencyinjection/11.0.0/automapper.extensions.microsoft.dependencyinjection.11.0.0.nupkg.sha512",

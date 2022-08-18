@@ -40,9 +40,17 @@
     justify-content: start;
 }
 
+.my_message span{
+    background-color: yellowgreen;
+}
+
 .frd_message{
     display: flex;
     justify-content: end;
+}
+
+.frd_message span{
+    background-color: goldenrod;
 }
 
 .chat-box{
