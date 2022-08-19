@@ -5,7 +5,7 @@ import { message } from '@common/models/message';
 import { sendmessage } from '@common/models/sendmessage';
 import { MessageService } from '@common/services/message/message.service';
 import { sendMessage } from '@microsoft/signalr/dist/esm/Utils';
-import { distinctUntilChanged, take } from 'rxjs';
+import { distinctUntilChanged, take, Subject } from 'rxjs';
 
 
 @Component({
@@ -52,12 +52,25 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
       this.recieverId = id;
     }
 
+
     const username = (this.activeRoute.snapshot.paramMap.get("username"));
     if(username != null){
       this.recieverUsername = username;
     }
     this.Ini();
+
+    this.messageService.loadMessage(this.recieverId).subscribe(res => {
+      this.messageService.messageThreadSource.next(res)
+    }, error =>{
+      console.log(error);
+    })
+   
+
+
     this.messageService.createHubConnection(this.recieverId);
+
+   
+
 
     this.messageService.messageThread$.pipe(distinctUntilChanged())
       .subscribe(res =>{
@@ -66,13 +79,7 @@ export class ChatBoxComponent implements OnInit, OnDestroy {
   }
 
   
-  getUserMessage(){
-    this.messageService.messageThread$.subscribe(res => {
-     
-      this.message = res as unknown as message[];
-      console.log(this.message);
-    })
-  }
+  
 
   sendSMS()
   {

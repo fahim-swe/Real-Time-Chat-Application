@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using api.DTOs;
 using api.Model;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 
@@ -12,19 +13,26 @@ namespace api.RabbitMQ
 {
     public class RabbitMQPublish : IRabbitMQPublish
     {
-        public Task  sendMessageToQueue(PublishMessageDto publishMessage)
+        private readonly ConnectionFactory _factory;
+        public RabbitMQPublish(IOptions<RabbitMQConnectionFactorySettings> rabbitMQConnectionString)
         {
-           var factory = new ConnectionFactory() {
-                Uri = new Uri("amqps://tbkngyyq:VoupLAj0d9yyDUOXQaKkqJuH8ABMFYXT@puffin.rmq2.cloudamqp.com/tbkngyyq"),
-                VirtualHost = "tbkngyyq",
-                Port = 5671,
-                Password = "VoupLAj0d9yyDUOXQaKkqJuH8ABMFYXT"
-                };
+            _factory = new ConnectionFactory()
+            {
+                Uri = new Uri(rabbitMQConnectionString.Value.Uri),
+                VirtualHost = rabbitMQConnectionString.Value.VirtualHost,
+                Port = rabbitMQConnectionString.Value.Port,
+                Password = rabbitMQConnectionString.Value.Password
+            };
+        }
+        public Task  sendMessageToQueue(Message publishMessage)
+        {
+           
+
             string databaseQueue = "DATABASEQueue";
             string queueName = "SignalRQueue";
             string exchangeName = "ExchangerQueue";
 
-            using(var connection = factory.CreateConnection())
+            using(var connection = _factory.CreateConnection())
             using(IModel channel = connection.CreateModel())
             {
               

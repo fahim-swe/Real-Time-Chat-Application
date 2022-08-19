@@ -9,6 +9,6 @@ namespace api.Services
     public interface IMessageRepository
     {
         Task AddMessage(Message message);
-        Task<IEnumerable<Message>> GetMessageThred(string currentUserId, string recipientId);
+        Task<List<Message>> GetMessage(string currentUserId, string recipientId);
     }
 }

@@ -7,6 +7,7 @@ using api.DTOs;
 using api.Model;
 using api.Services;
 using AutoMapper;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -24,15 +25,16 @@ namespace api.RabbitMQ
         private string queueName = "DATABASEQueue";
     
         public RabbitMQDBConsumer(IServiceProvider serviceProvider, IMessageRepository message,
-            IMapper mapper
+            IMapper mapper, IOptions<RabbitMQConnectionFactorySettings> rabbitMQConnectionString
         )
         {
-            _factory = new ConnectionFactory() {
-                Uri = new Uri("amqps://tbkngyyq:VoupLAj0d9yyDUOXQaKkqJuH8ABMFYXT@puffin.rmq2.cloudamqp.com/tbkngyyq"),
-                VirtualHost = "tbkngyyq",
-                Port = 5671,
-                Password = "VoupLAj0d9yyDUOXQaKkqJuH8ABMFYXT"
-                };
+             _factory = new ConnectionFactory()
+            {
+                Uri = new Uri(rabbitMQConnectionString.Value.Uri),
+                VirtualHost = rabbitMQConnectionString.Value.VirtualHost,
+                Port = rabbitMQConnectionString.Value.Port,
+                Password = rabbitMQConnectionString.Value.Password
+            };
             _connection = _factory.CreateConnection();
             _channel = _connection.CreateModel();
             _message = message;
@@ -55,15 +57,8 @@ namespace api.RabbitMQ
                 var data = Encoding.UTF8.GetString(body);
               
                 try{
-                    var result = JsonConvert.DeserializeObject<PublishMessageDto>(data);
-                    Console.WriteLine(result);
-
-                    var message = new Message
-                    {   
-                        SenderId = result.SenderId,
-                        RecipientId = result.RecipientId,
-                        Content = result.Content
-                    };
+                    var message = JsonConvert.DeserializeObject<Message>(data);
+                    Console.WriteLine(message);
 
                     Console.WriteLine( "DATABASE" + message);
                     await _message.AddMessage(message);

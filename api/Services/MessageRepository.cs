@@ -30,11 +30,9 @@ namespace api.Services
             await _userMessage.InsertOneAsync(message);
         }
 
-        public async Task<IEnumerable<Message>> GetMessageThred(string currentUserId, string recipientId)
+        public async Task<List<Message>> GetMessage(string currentUserId, string recipientId)
         {
-
-
-             return await _userMessage.Find( x => (x.SenderId == currentUserId && x.RecipientId == recipientId) 
+            return await _userMessage.Find( x => (x.SenderId == currentUserId && x.RecipientId == recipientId) 
                                             || (x.SenderId == recipientId && x.RecipientId == currentUserId))
                                         .SortBy( x=> x.MessageSent)
                                         .ToListAsync();

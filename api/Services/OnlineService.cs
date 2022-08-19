@@ -36,19 +36,14 @@ namespace api.Services
           var user = await _userUservice.getByIdAsync(id);
           users.Add(_mapper.Map<MemberDTO>(user)); 
           
-          
         }
       }
-
-     
       return users;
     }
 
-    public async Task<bool> updateOnlineStatus(string key)
-    {
-     return await _cache.StringSetAsync("look_at_baby:online:"+key,"online",TimeSpan.FromMinutes(1));
-    }
-
-        
+      public async Task<bool> updateOnlineStatus(string key)
+      {
+      return await _cache.StringSetAsync("look_at_baby:online:"+key,"online",TimeSpan.FromMinutes(1));
+      }
     }
 }

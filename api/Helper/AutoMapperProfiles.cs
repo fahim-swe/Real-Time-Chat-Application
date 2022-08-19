@@ -18,8 +18,6 @@ namespace api.Helper
 
             CreateMap<Message, MessageDTO>();
             CreateMap<MessageDTO, Message>();
-            CreateMap<PublishMessageDto, Message>();
-            CreateMap<Message, PublishMessageDto>();
         }
     }
 }

@@ -5,6 +5,7 @@ using api.Model;
 using api.SignalR;
 using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -20,17 +21,17 @@ namespace api.RabbitMQ
         private readonly IMapper _mapper;
         private string queueName = "SignalRQueue";
  
-        public RabitMQSignalRConsumer(IServiceProvider serviceProvider, IMapper mapper)
+        public RabitMQSignalRConsumer(IServiceProvider serviceProvider, IMapper mapper, IOptions<RabbitMQConnectionFactorySettings> rabbitMQConnectionString)
         {
 
-            _factory = new ConnectionFactory() {
-                Uri = new Uri("amqps://tbkngyyq:VoupLAj0d9yyDUOXQaKkqJuH8ABMFYXT@puffin.rmq2.cloudamqp.com/tbkngyyq"),
-                VirtualHost = "tbkngyyq",
-                Port = 5671,
-                Password = "VoupLAj0d9yyDUOXQaKkqJuH8ABMFYXT"
-                };
-
-
+            _factory = new ConnectionFactory()
+            {
+                Uri = new Uri(rabbitMQConnectionString.Value.Uri),
+                VirtualHost = rabbitMQConnectionString.Value.VirtualHost,
+                Port = rabbitMQConnectionString.Value.Port,
+                Password = rabbitMQConnectionString.Value.Password
+            };
+            
             _connection = _factory.CreateConnection();
             _channel = _connection.CreateModel();
             _mapper = mapper;
@@ -50,16 +51,28 @@ namespace api.RabbitMQ
                 
                 byte[] body = ea.Body.ToArray();
 
-                var message = Encoding.UTF8.GetString(body);
-                var result = JsonConvert.DeserializeObject<PublishMessageDto>(message);
+                var data = Encoding.UTF8.GetString(body);
+                var message = JsonConvert.DeserializeObject<Message>(data);
 
                 Console.WriteLine(queueName + "Checking: " + message);
 
-                chatHub.Clients.Group(result.GroupName).SendAsync("NewMessage", _mapper.Map<Message>(result));
+                var group = GetGroupName(message.SenderId, message.RecipientId);
+                
+                await chatHub.Clients.Group(group).SendAsync("NewMessage", message);
             };
  
             _channel.BasicConsume(queue: queueName ,autoAck: true, consumer: consumer);
         }
 
+
+        private string GetGroupName(string getUserId, string? otherUser)
+        {
+            var stringCompare = string.CompareOrdinal(getUserId.ToString(), otherUser) < 0;
+            return stringCompare ? $"{getUserId.ToString()}-{otherUser}" : $"{otherUser}-{getUserId.ToString()}";
+        }
+
     }
+
+
+  
 }

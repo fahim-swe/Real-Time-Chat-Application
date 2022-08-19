@@ -9,6 +9,6 @@ namespace api.RabbitMQ
 {
     public interface IRabbitMQPublish
     {
-        Task sendMessageToQueue(PublishMessageDto publishMessage);
+        Task sendMessageToQueue(Message publishMessage);
     }
 }
